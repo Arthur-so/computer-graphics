@@ -175,7 +175,7 @@ function main() {
             case "9": if (keyMode == KeyMode.Color) {colorVector = [0.5, 0.5, 1.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
             case "r": drawMode = DrawMode.Line; break;
             case "R": drawMode = DrawMode.Line; break;
-            case "t": drawMode = DrawMode.Triangle; console.log(drawMode); break;
+            case "t": drawMode = DrawMode.Triangle; break;
             case "T": drawMode = DrawMode.Triangle; break;
             case "e": keyMode = KeyMode.Thickness; break;
             case "E": keyMode = KeyMode.Thickness; break;
