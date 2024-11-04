@@ -33,19 +33,47 @@ function main() {
 
     canvas.addEventListener("mousedown", mouseClick, false);
 
-    let clickCount = 0;
+   const DrawMode = {Triangle: 'Triangle', Line: 'Line'}
+
+    let lineClickCount = 0;
     let startX, startY, endX, endY;
+
+    let triangleClickCount = 0;
+    let triangleX1, triangleY1, triangleX2, triangleY2, triangleX3, triangleY3;
+
+    let drawMode = DrawMode.Line
     function mouseClick(event) {
-        if (clickCount === 0) {
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            startX = event.offsetX;
-            startY = event.offsetY;
-            clickCount = 1;
-        } else {
-            endX = event.offsetX;
-            endY = event.offsetY;
-            bresenham(startX, startY, endX, endY);
-            clickCount = 0;
+        if (drawMode == DrawMode.Line) {
+            if (lineClickCount === 0) {
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                startX = event.offsetX;
+                startY = event.offsetY;
+                lineClickCount = 1;
+            } else {
+                endX = event.offsetX;
+                endY = event.offsetY;
+                bresenham(startX, startY, endX, endY);
+                lineClickCount = 0;
+            }
+        }
+        else {
+            if (triangleClickCount == 0) {
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                triangleX1 = event.offsetX;
+                triangleY1 = event.offsetY;
+                triangleClickCount++;
+            } else if (triangleClickCount == 1) {
+                triangleX2 = event.offsetX;
+                triangleY2 = event.offsetY;
+                triangleClickCount++;
+            } else {
+                triangleX3 = event.offsetX;
+                triangleY3 = event.offsetY;
+                bresenham(triangleX1, triangleY1, triangleX2, triangleY2);
+                bresenham(triangleX1, triangleY1, triangleX3, triangleY3);
+                bresenham(triangleX2, triangleY2, triangleX3, triangleY3);
+                triangleClickCount = 0;
+            }
         }
     }
 
@@ -122,10 +150,10 @@ function main() {
         gl.drawArrays(gl.POINTS, 0, 1); // Desenha o ponto
     }
 
+    let colorVector = [0.0, 0.0, 0.0];
     const bodyElement = document.querySelector("body");
     bodyElement.addEventListener("keydown", keyDown, false);
 
-    let colorVector = [0.0, 0.0, 0.0];
     function keyDown(event) {
         switch (event.key) {
             case "0": colorVector = [0.0, 0.0, 0.0]; break;
@@ -138,6 +166,10 @@ function main() {
             case "7": colorVector = [1.0, 0.5, 0.5]; break;
             case "8": colorVector = [0.5, 1.0, 0.5]; break;
             case "9": colorVector = [0.5, 0.5, 1.0]; break;
+            case "r": drawMode = DrawMode.Line; break;
+            case "R": drawMode = DrawMode.Line; break;
+            case "t": drawMode = DrawMode.Triangle; console.log(drawMode); break;
+            case "T": drawMode = DrawMode.Triangle; break;
         }
     }
 
