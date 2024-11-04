@@ -35,7 +35,6 @@ function main() {
 
     let clickCount = 0;
     let startX, startY, endX, endY;
-
     function mouseClick(event) {
         if (clickCount === 0) {
             gl.clear(gl.COLOR_BUFFER_BIT);
@@ -49,34 +48,6 @@ function main() {
             clickCount = 0;
         }
     }
-
-
-    // function bresenham(x1, y1, x2, y2) {
-    //     let dx = Math.abs(x2 - x1);
-    //     let dy = Math.abs(y2 - y1);
-    //     let incSup = 2 * dy;
-    //     let incInf = 2 * (dy - dx);
-    //     let p = 2 * dy - dx;
-    
-    //     // Determina o sentido de incremento para x e y
-    //     let incX = (x1 < x2) ? 1 : -1;
-    //     let incY = (y1 < y2) ? 1 : -1;
-        
-    //     let x = x1;
-    //     let y = y1;
-    //     writePixel(x, y);  // Plota o ponto inicial
-    
-    //     for (let i = 0; i < dx; i++) {
-    //         if (p < 0) {
-    //             p += incSup;
-    //         } else {
-    //             p += incInf;
-    //             y += incY;
-    //         }
-    //         x += incX;
-    //         writePixel(x, y);  // Plota o próximo ponto
-    //     }
-    // }
 
     function bresenham(x1, y1, x2, y2) {
         const dx = Math.abs(x2 - x1);
@@ -171,6 +142,10 @@ function main() {
     }
 
     gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // linha inicial entre os pontos (0,0) e (0,0) azul
+    colorVector = [0,0,1]
+    bresenham(0,0,0,0)
 }
 
 function createShader(gl, type, source) {
