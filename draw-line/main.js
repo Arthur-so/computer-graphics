@@ -19,6 +19,10 @@ function main() {
     const colorBuffer = gl.createBuffer();
 
     const positionLocation = gl.getAttribLocation(program, `position`);
+    const pointSizeLocation = gl.getUniformLocation(program, 'pointSize');
+
+    gl.uniform1f(pointSizeLocation, 5.0);
+
     gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -150,26 +154,34 @@ function main() {
         gl.drawArrays(gl.POINTS, 0, 1); // Desenha o ponto
     }
 
+    const KeyMode = {Thickness: 'Thickness', Color: 'Color'}
+
     let colorVector = [0.0, 0.0, 0.0];
+    let keyMode = KeyMode.Color
     const bodyElement = document.querySelector("body");
     bodyElement.addEventListener("keydown", keyDown, false);
 
     function keyDown(event) {
+        console.log(event.key)
         switch (event.key) {
-            case "0": colorVector = [0.0, 0.0, 0.0]; break;
-            case "1": colorVector = [1.0, 0.0, 0.0]; break;
-            case "2": colorVector = [0.0, 1.0, 0.0]; break;
-            case "3": colorVector = [0.0, 0.0, 1.0]; break;
-            case "4": colorVector = [1.0, 1.0, 0.0]; break;
-            case "5": colorVector = [0.0, 1.0, 1.0]; break;
-            case "6": colorVector = [1.0, 0.0, 1.0]; break;
-            case "7": colorVector = [1.0, 0.5, 0.5]; break;
-            case "8": colorVector = [0.5, 1.0, 0.5]; break;
-            case "9": colorVector = [0.5, 0.5, 1.0]; break;
+            case "0": if (keyMode == KeyMode.Color) {colorVector = [0.0, 0.0, 0.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "1": if (keyMode == KeyMode.Color) {colorVector = [1.0, 0.0, 0.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "2": if (keyMode == KeyMode.Color) {colorVector = [0.0, 1.0, 0.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "3": if (keyMode == KeyMode.Color) {colorVector = [0.0, 0.0, 1.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "4": if (keyMode == KeyMode.Color) {colorVector = [1.0, 1.0, 0.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "5": if (keyMode == KeyMode.Color) {colorVector = [0.0, 1.0, 1.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "6": if (keyMode == KeyMode.Color) {colorVector = [1.0, 0.0, 1.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "7": if (keyMode == KeyMode.Color) {colorVector = [1.0, 0.5, 0.5];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "8": if (keyMode == KeyMode.Color) {colorVector = [0.5, 1.0, 0.5];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
+            case "9": if (keyMode == KeyMode.Color) {colorVector = [0.5, 0.5, 1.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
             case "r": drawMode = DrawMode.Line; break;
             case "R": drawMode = DrawMode.Line; break;
             case "t": drawMode = DrawMode.Triangle; console.log(drawMode); break;
             case "T": drawMode = DrawMode.Triangle; break;
+            case "e": keyMode = KeyMode.Thickness; break;
+            case "E": keyMode = KeyMode.Thickness; break;
+            case "k": keyMode = KeyMode.Color; break;
+            case "K": keyMode = KeyMode.Color; break;
         }
     }
 
