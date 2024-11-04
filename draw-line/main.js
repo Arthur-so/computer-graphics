@@ -162,7 +162,6 @@ function main() {
     bodyElement.addEventListener("keydown", keyDown, false);
 
     function keyDown(event) {
-        console.log(event.key)
         switch (event.key) {
             case "0": if (keyMode == KeyMode.Color) {colorVector = [0.0, 0.0, 0.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
             case "1": if (keyMode == KeyMode.Color) {colorVector = [1.0, 0.0, 0.0];} else {gl.uniform1f(pointSizeLocation, event.key);} break;
