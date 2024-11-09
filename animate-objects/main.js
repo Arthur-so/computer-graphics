@@ -41,64 +41,39 @@ function main(){
   mat4.scale(matrix, matrix, [0.5, 0.5, 1.0]);
   gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
 
-  mat4.identity(matrix);
-
   gl.clearColor(1.0, 1.0, 1.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  drawFlower();
-  drawCar();
-  drawClown();
+  let tx = 0.0;
+  let speed = 0.01;
+
+  function animateCar() {
+      gl.clear(gl.COLOR_BUFFER_BIT);
+
+      mat4.identity(matrix);
+      mat4.translate(matrix, matrix, [tx, 0.0, 0.0]);
+      gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+
+      drawCar();
+
+      tx += speed;
+      if (tx > 0.9 || tx < -0.15) {
+          speed = -speed;
+      }
+
+      requestAnimationFrame(animateCar);
+  }
 
   function drawCar() {
-    // rodas
-    drawCircle(0.1, -0.7, -0.7, [0,0,0], 30);
-    drawCircle(0.1, -0.2, -0.7, [0,0,0], 30);
+      // Desenha as rodas
+      drawCircle(0.1, -0.7, -0.7, [0, 0, 0], 30);
+      drawCircle(0.1, -0.2, -0.7, [0, 0, 0], 30);
 
-    //carcaca
-    drawRectangle(-0.9, -0.65, 1, 0.2, [0,0,1])
-    drawRectangle(-0.62, -0.45, 0.4, 0.2, [0,0,1])
-
+      // Desenha a carroceria
+      drawRectangle(-0.9, -0.65, 1, 0.2, [0, 0, 1]);
+      drawRectangle(-0.62, -0.45, 0.4, 0.2, [0, 0, 1]);
   }
 
-  function drawFlower() {
-    //caule
-    drawRectangle(0.5, 0, 0.1, 0.5, [0, 1, 0]); 
-    // petalas
-    drawCircle(0.1, 0.55, 0.5, [1,0,0], 30);
-    drawCircle(0.1, 0.55, 0.7, [1,0,0], 30);
-    drawCircle(0.1, 0.45, 0.6, [1,0,0], 30);
-    drawCircle(0.1, 0.65, 0.6, [1,0,0], 30);
-    //meio
-    drawCircle(0.1, 0.55, 0.6, [1,1,0], 30);
-  }
-
-  function drawClown() {
-    //rosto
-    drawCircle(0.35, -0.45, 0.35, [1,0.9,0.7], 30);
-    //olhos
-    drawCircle(0.07, -0.55, 0.45, [1,1,1], 30);
-    drawCircle(0.03, -0.55, 0.45, [0,0,0], 30);
-    drawCircle(0.07, -0.35, 0.45, [1,1,1], 30);
-    drawCircle(0.03, -0.35, 0.45, [0,0,0], 30);
-    //cabelo
-    drawCircle(0.08, -0.85, 0.45, [0,0,1], 30);
-    drawCircle(0.08, -0.8, 0.55, [0,0,1], 30);
-    drawCircle(0.08, -0.72, 0.65, [0,0,1], 30);
-    drawCircle(0.08, -0.6, 0.73, [0,0,1], 30);
-    drawCircle(0.08, -0.45, 0.74, [0,0,1], 30);
-    drawCircle(0.08, -0.08, 0.45, [0,0,1], 30);
-    drawCircle(0.08, -0.12, 0.55, [0,0,1], 30);
-    drawCircle(0.08, -0.22, 0.65, [0,0,1], 30);
-    drawCircle(0.08, -0.32, 0.73, [0,0,1], 30);
-    //chapeu
-    drawRectangle(-0.72, 0.68, 0.55, 0.15, [0.3,1,0.2])
-    drawRectangle(-0.64, 0.68, 0.4, 0.3, [0.3,1,0.2])
-    //nariz
-    drawCircle(0.07, -0.45, 0.3, [1,0,0], 30);
-    //boca
-    drawRectangle(-0.6, 0.08, 0.3, 0.08, [1,0.2,0.2])
-  }
 
   function drawCircle(r, x, y, color, segments) {
     gl.bindBuffer(gl.ARRAY_BUFFER,positionBuffer);
@@ -115,6 +90,8 @@ function main(){
     setRectangleColor(gl,color); //Green
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
+
+  animateCar();
 }
 
 
