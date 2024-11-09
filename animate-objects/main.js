@@ -49,19 +49,41 @@ function main(){
   let tx_car = 0.0;
   let ty_flower = 0.0;
   let theta_clown = 0.0;
+  let theta_wheel = 0.0;
+  let = rotation_wheel = -1
 
   // Função de animação unificada
   function animate() {
       gl.clear(gl.COLOR_BUFFER_BIT);
 
-      // Atualização e desenho do carro
+      //Atualização e desenho do carro
+      // Carroceria
       mat4.identity(matrix);
       mat4.translate(matrix, matrix, [tx_car, 0.0, 0.0]);
       gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
-      drawCar();
+      drawBodyCar();
+      // Roda 1 do carro
+      mat4.identity(matrix);
+      mat4.translate(matrix, matrix, [tx_car, 0.0, 0.0]);
+      mat4.translate(matrix, matrix, [-0.7, -0.7, 0.0]);
+      mat4.rotateZ(matrix, matrix, degToRad(theta_wheel));
+      mat4.translate(matrix, matrix, [0.7, 0.7, 0.0]);
+      gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+      drawCircle(0.1, -0.7, -0.7, [0, 0, 0], 10);
+      // Roda 2 do carro
+      mat4.identity(matrix);
+      mat4.translate(matrix, matrix, [tx_car, 0.0, 0.0]);
+      mat4.translate(matrix, matrix, [-0.2, -0.7, 0.0]);
+      mat4.rotateZ(matrix, matrix, degToRad(theta_wheel));
+      mat4.translate(matrix, matrix, [0.2, 0.7, 0.0]);
+      gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+      drawCircle(0.1, -0.2, -0.7, [0, 0, 0], 10);
+      // Atualização da carroceria e da roda do carro
       tx_car += carSpeed;
+      theta_wheel += rotation_wheel
       if (tx_car > 0.9 || tx_car < -0.15) {
           carSpeed = -carSpeed;
+          rotation_wheel = -rotation_wheel;
       }
 
       // Atualização e desenho da flor
@@ -76,9 +98,9 @@ function main(){
 
       // Rotação do palhaço
       mat4.identity(matrix);
-      mat4.translate(matrix, matrix, [-0.45, 0.35, 0.0]);  // Mover para o centro do rosto do palhaço
+      mat4.translate(matrix, matrix, [-0.45, 0.35, 0.0]);
       mat4.rotateZ(matrix, matrix, degToRad(theta_clown));
-      mat4.translate(matrix, matrix, [0.45, -0.35, 0.0]);  // Retornar ao ponto original após rotação
+      mat4.translate(matrix, matrix, [0.45, -0.35, 0.0]);
       gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
       drawClown();
       theta_clown += 1.0;
@@ -87,11 +109,7 @@ function main(){
       requestAnimationFrame(animate);
   }
 
-  function drawCar() {
-      // Desenha as rodas
-      drawCircle(0.1, -0.7, -0.7, [0, 0, 0], 30);
-      drawCircle(0.1, -0.2, -0.7, [0, 0, 0], 30);
-
+  function drawBodyCar() {
       // Desenha a carroceria
       drawRectangle(-0.9, -0.65, 1, 0.2, [0, 0, 1]);
       drawRectangle(-0.62, -0.45, 0.4, 0.2, [0, 0, 1]);
