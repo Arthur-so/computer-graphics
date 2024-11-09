@@ -74,12 +74,14 @@ function main(){
           flowerSpeed = -flowerSpeed;
       }
 
-      // Atualização e desenho do palhaço
+      // Rotação do palhaço
       mat4.identity(matrix);
+      mat4.translate(matrix, matrix, [-0.45, 0.35, 0.0]);  // Mover para o centro do rosto do palhaço
       mat4.rotateZ(matrix, matrix, degToRad(theta_clown));
-      theta_clown += 1.0
+      mat4.translate(matrix, matrix, [0.45, -0.35, 0.0]);  // Retornar ao ponto original após rotação
       gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
       drawClown();
+      theta_clown += 1.0;
 
       // Solicita o próximo quadro
       requestAnimationFrame(animate);
