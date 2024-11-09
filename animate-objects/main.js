@@ -44,24 +44,44 @@ function main(){
   gl.clearColor(1.0, 1.0, 1.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  let tx = 0.0;
-  let speed = 0.01;
+  let carSpeed = 0.01;
+  let flowerSpeed = 0.01;
+  let tx_car = 0.0;
+  let ty_flower = 0.0;
+  let theta_clown = 0.0;
 
-  function animateCar() {
+  // Função de animação unificada
+  function animate() {
       gl.clear(gl.COLOR_BUFFER_BIT);
 
+      // Atualização e desenho do carro
       mat4.identity(matrix);
-      mat4.translate(matrix, matrix, [tx, 0.0, 0.0]);
+      mat4.translate(matrix, matrix, [tx_car, 0.0, 0.0]);
       gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
-
       drawCar();
-
-      tx += speed;
-      if (tx > 0.9 || tx < -0.15) {
-          speed = -speed;
+      tx_car += carSpeed;
+      if (tx_car > 0.9 || tx_car < -0.15) {
+          carSpeed = -carSpeed;
       }
 
-      requestAnimationFrame(animateCar);
+      // Atualização e desenho da flor
+      mat4.identity(matrix);
+      mat4.translate(matrix, matrix, [0.0, ty_flower, 0.0]);
+      gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+      drawFlower();
+      ty_flower += flowerSpeed;
+      if (ty_flower > 0.2 || ty_flower < -0.15) {
+          flowerSpeed = -flowerSpeed;
+      }
+
+      mat4.identity(matrix);
+      mat4.rotateZ(matrix, matrix, degToRad(theta_clown));
+      theta_clown += 1.0
+      gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+      drawClown();
+
+      // Solicita o próximo quadro
+      requestAnimationFrame(animate);
   }
 
   function drawCar() {
@@ -72,6 +92,45 @@ function main(){
       // Desenha a carroceria
       drawRectangle(-0.9, -0.65, 1, 0.2, [0, 0, 1]);
       drawRectangle(-0.62, -0.45, 0.4, 0.2, [0, 0, 1]);
+  }
+
+  function drawFlower() {
+    //caule
+    drawRectangle(0.5, 0, 0.1, 0.5, [0, 1, 0]); 
+    // petalas
+    drawCircle(0.1, 0.55, 0.5, [1,0,0], 30);
+    drawCircle(0.1, 0.55, 0.7, [1,0,0], 30);
+    drawCircle(0.1, 0.45, 0.6, [1,0,0], 30);
+    drawCircle(0.1, 0.65, 0.6, [1,0,0], 30);
+    //meio
+    drawCircle(0.1, 0.55, 0.6, [1,1,0], 30);
+  }
+
+  function drawClown() {
+    //rosto
+    drawCircle(0.35, -0.45, 0.35, [1,0.9,0.7], 30);
+    //olhos
+    drawCircle(0.07, -0.55, 0.45, [1,1,1], 30);
+    drawCircle(0.03, -0.55, 0.45, [0,0,0], 30);
+    drawCircle(0.07, -0.35, 0.45, [1,1,1], 30);
+    drawCircle(0.03, -0.35, 0.45, [0,0,0], 30);
+    //cabelo
+    drawCircle(0.08, -0.85, 0.45, [0,0,1], 30);
+    drawCircle(0.08, -0.8, 0.55, [0,0,1], 30);
+    drawCircle(0.08, -0.72, 0.65, [0,0,1], 30);
+    drawCircle(0.08, -0.6, 0.73, [0,0,1], 30);
+    drawCircle(0.08, -0.45, 0.74, [0,0,1], 30);
+    drawCircle(0.08, -0.08, 0.45, [0,0,1], 30);
+    drawCircle(0.08, -0.12, 0.55, [0,0,1], 30);
+    drawCircle(0.08, -0.22, 0.65, [0,0,1], 30);
+    drawCircle(0.08, -0.32, 0.73, [0,0,1], 30);
+    //chapeu
+    drawRectangle(-0.72, 0.68, 0.55, 0.15, [0.3,1,0.2])
+    drawRectangle(-0.64, 0.68, 0.4, 0.3, [0.3,1,0.2])
+    //nariz
+    drawCircle(0.07, -0.45, 0.3, [1,0,0], 30);
+    //boca
+    drawRectangle(-0.6, 0.08, 0.3, 0.08, [1,0.2,0.2])
   }
 
 
@@ -91,7 +150,7 @@ function main(){
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 
-  animateCar();
+  animate();
 }
 
 
@@ -165,6 +224,10 @@ function setRectangleVertices(gl, x, y, width, height) {
         colorData.push(...color);
     }
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData), gl.STATIC_DRAW);
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
   }
 
   main();
