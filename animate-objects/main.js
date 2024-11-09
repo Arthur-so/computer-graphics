@@ -74,6 +74,7 @@ function main(){
           flowerSpeed = -flowerSpeed;
       }
 
+      // Atualização e desenho do palhaço
       mat4.identity(matrix);
       mat4.rotateZ(matrix, matrix, degToRad(theta_clown));
       theta_clown += 1.0
