@@ -49,7 +49,15 @@ function main(){
        
     let matrix = m4.identity();
 
+    tx = 0
+    dx = 0.01
     function drawSquare(){
+
+        tx += dx;
+        if (tx > 1 || tx < 0) {
+            dx = -dx;
+        }
+
         gl.clear(gl.COLOR_BUFFER_BIT);
   
         gl.viewport(0, 0, canvas.width, canvas.height);
@@ -58,10 +66,45 @@ function main(){
         gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData), gl.STATIC_DRAW);
         matrix = m4.identity();
-        matrix = m4.multiply(matrix,set2dClippingWindow(-1.0,1.0,-1.0,1.0));
-        matrix = m4.multiply(matrix,set2dViewingMatrix([0.0,0.0],0.0));
+        matrix = m4.multiply(matrix,set2dClippingWindow(-1.0,0,0,1.0));
+        matrix = m4.multiply(matrix,set2dViewingMatrix([tx,0.0],0.0));
         gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
         gl.drawArrays(gl.TRIANGLES, 0, vertexData.length / 3);
+
+        // gl.viewport(0, 0, canvas.width, canvas.height);
+        // gl.bindBuffer(gl.ARRAY_BUFFER,positionBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData), gl.STATIC_DRAW);
+        // gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData), gl.STATIC_DRAW);
+        // matrix = m4.identity();
+        // matrix = m4.multiply(matrix,set2dClippingWindow(0,-2.0,0,2.0));
+        // matrix = m4.multiply(matrix,set2dViewingMatrix([0,0.0],0.0));
+        // gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+        // gl.drawArrays(gl.TRIANGLES, 0, vertexData.length / 3);
+
+        // gl.viewport(0, 0, canvas.width, canvas.height);
+        // gl.bindBuffer(gl.ARRAY_BUFFER,positionBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData), gl.STATIC_DRAW);
+        // gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData), gl.STATIC_DRAW);
+        // matrix = m4.identity();
+        // matrix = m4.multiply(matrix,set2dClippingWindow(-2.0,0,-2.0,0));
+        // matrix = m4.multiply(matrix,set2dViewingMatrix([0,0.0],0.0));
+        // gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+        // gl.drawArrays(gl.TRIANGLES, 0, vertexData.length / 3);
+
+        // gl.viewport(0, 0, canvas.width, canvas.height);
+        // gl.bindBuffer(gl.ARRAY_BUFFER,positionBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData), gl.STATIC_DRAW);
+        // gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorData), gl.STATIC_DRAW);
+        // matrix = m4.identity();
+        // matrix = m4.multiply(matrix,set2dClippingWindow(0,2.0,-2.0,0));
+        // matrix = m4.multiply(matrix,set2dViewingMatrix([0,0.0],0.0));
+        // gl.uniformMatrix4fv(matrixUniformLocation, false, matrix);
+        // gl.drawArrays(gl.TRIANGLES, 0, vertexData.length / 3);
+
+        requestAnimationFrame(drawSquare);
     }
     
     drawSquare();
